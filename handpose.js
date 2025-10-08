@@ -3,6 +3,25 @@ let video;
 let hands = [];
 let bgImg;
 
+// ### lips ###
+// array for the positions of normalized coordianates
+const puzzleDots = [
+  { x: 0.45, y: 0.665 }, // 1
+  { x: 0.485, y: 0.68 }, // 2
+  { x: 0.515, y: 0.665 }, // 3
+  { x: 0.56, y: 0.71 }, // 4
+  { x: 0.515, y: 0.765 }, // 5
+  { x: 0.45, y: 0.765 }, // 6
+  { x: 0.4, y: 0.71 }, // 7
+  { x: 0.45, y: 0.665 }, // 8
+];
+
+// array to fill the pixel coordinates
+let puzzleDotsPixels = [];
+
+// diameter of the dot drawn
+let dotDiameter = 12;
+
 function preload() {
   handpose = ml5.handPose();
   bgImg = loadImage("img/placeholder-background.png");
@@ -10,7 +29,11 @@ function preload() {
 
 function setup() {
   createCanvas(1024, 768);
-  //   pixelDensity(1);
+
+  calculateDotPixels();
+  // check the calculation pixel calculation
+  // console.log("puzzleDotsPixels:", puzzleDotsPixels);
+
   video = createCapture(VIDEO);
   video.size(1024, 768);
   video.hide();
@@ -44,6 +67,8 @@ function draw() {
 
   image(bgImg, 0, 0, width, height);
 
+  drawDots();
+
   // mirror for a natural feel
   push();
   translate(width, 0);
@@ -55,9 +80,9 @@ function draw() {
   if (hands.length > 0) {
     let indexFinger = hands[0].index_finger_tip;
     push();
-    fill(255);
+    fill(255, 255, 255);
 
-    ellipse(indexFinger.x, indexFinger.y, 20);
+    ellipse(indexFinger.x, indexFinger.y, 10);
     pop();
   }
   pop();
@@ -69,6 +94,31 @@ function draw() {
 //   const yn = +(mouseY / height).toFixed(3);
 //   console.log(`{ x: ${xn}, y: ${yn} },`);
 // }
+
+function calculateDotPixels() {
+  puzzleDotsPixels = [];
+
+  // fills the new array with pixel coordinates
+  for (let i = 0; i < puzzleDots.length; i++) {
+    const dot = puzzleDots[i];
+    const xPixel = dot.x * width;
+    const yPixel = dot.y * height;
+    puzzleDotsPixels.push({ x: xPixel, y: yPixel });
+  }
+}
+
+function drawDots() {
+  noStroke();
+  fill(0, 0, 255);
+
+  for (let i = 0; i < puzzleDotsPixels.length; i++) {
+    const dot = puzzleDotsPixels[i];
+
+    ellipse(dot.x, dot.y, dotDiameter);
+
+    fill(255, 255, 255, 150);
+  }
+}
 
 function getHandsData(results) {
   hands = results;
