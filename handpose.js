@@ -6,7 +6,7 @@ let bgImg;
 // ### lips ###
 // array for the positions of normalized coordianates
 const puzzleDots = [
-  { x: 0.45, y: 0.665 }, // 1
+  { x: 0.46, y: 0.665 }, // 1
   { x: 0.485, y: 0.68 }, // 2
   { x: 0.515, y: 0.665 }, // 3
   { x: 0.56, y: 0.71 }, // 4
@@ -109,12 +109,18 @@ function calculateDotPixels() {
 
 function drawDots() {
   noStroke();
-  fill(0, 0, 255);
+  fill(255, 255, 255);
+  textAlign(CENTER, CENTER);
+  textSize(12);
 
   for (let i = 0; i < puzzleDotsPixels.length; i++) {
+    // current dot position
     const dot = puzzleDotsPixels[i];
 
     ellipse(dot.x, dot.y, dotDiameter);
+
+    fill(0, 0, 0);
+    text(i + 1, dot.x, dot.y);
 
     fill(255, 255, 255, 150);
   }
