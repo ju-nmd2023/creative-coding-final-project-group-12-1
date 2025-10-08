@@ -34,7 +34,7 @@ function draw() {
   //   tint(0, 255, 0);
 
   // blue
-  //   tint(0, 0, 255);
+  // tint(0, 0, 255);
 
   // make the background png darker, reveal each part stepwise?
   //   background(0);
