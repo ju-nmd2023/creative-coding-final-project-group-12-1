@@ -6,7 +6,7 @@ let bgImg;
 // ### face ###
 // array for the positions of normalized coordianates
 const puzzleDots = [
-  { x:  0.452, y: 0.031 }, // 1
+  { x: 0.452, y: 0.031 }, // 1
   { x: 0.413, y: 0.557 }, // 2
   { x: 0.451, y: 0.557 }, // 3
   { x: 0.454, y: 0.609 }, // 4
@@ -105,6 +105,9 @@ function draw() {
 
   image(bgImg, 0, 0, width, height);
 
+  // drawing lines between visited dots
+  drawVisitedPath();
+
   // drawing the dots with normal (non-mirrored) coordinates
   drawDots();
 
@@ -162,6 +165,22 @@ function calculateDotPixels() {
     const yPixel = dot.y * height;
     puzzleDotsPixels.push({ x: xPixel, y: yPixel });
   }
+}
+
+// lines between two connected dots
+function drawVisitedPath() {
+  // at least 2 points needed
+  if (drawPath.length < 2) {
+    return;
+  }
+  noFill();
+  stroke(255, 255, 255, 150);
+  strokeWeight(2);
+  beginShape();
+  for (let i = 0; i < drawPath.length; i++) {
+    vertex(drawPath[i].x, drawPath[i].y);
+  }
+  endShape();
 }
 
 function drawDots() {
