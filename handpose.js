@@ -3,17 +3,41 @@ let video;
 let hands = [];
 let bgImg;
 
-// ### lips ###
+// ### face ###
 // array for the positions of normalized coordianates
 const puzzleDots = [
-  { x: 0.46, y: 0.665 }, // 1
-  { x: 0.485, y: 0.68 }, // 2
-  { x: 0.515, y: 0.665 }, // 3
-  { x: 0.56, y: 0.71 }, // 4
-  { x: 0.515, y: 0.765 }, // 5
-  { x: 0.45, y: 0.765 }, // 6
-  { x: 0.4, y: 0.71 }, // 7
-  { x: 0.45, y: 0.665 }, // 8
+  { x:  0.452, y: 0.031 }, // 1
+  { x: 0.413, y: 0.557 }, // 2
+  { x: 0.451, y: 0.557 }, // 3
+  { x: 0.454, y: 0.609 }, // 4
+  { x: 0.435, y: 0.796 }, // 5
+  { x: 0.336, y: 0.703 }, // 6
+  { x: 0.272, y: 0.54 }, // 7
+  { x: 0.248, y: 0.436 }, // 8
+  { x: 0.258, y: 0.257 }, // 9
+  { x: 0.438, y: 0.042 }, // 10
+];
+
+// ### lips ###
+// array for the positions of normalized coordianates
+const puzzleDotsLips = [
+  { x: 0.391, y: 0.633 }, // 1
+  { x: 0.438, y: 0.602 }, // 2
+  { x: 0.458, y: 0.608 }, // 3
+  { x: 0.488, y: 0.59 }, // 4
+  { x: 0.538, y: 0.638 }, // 5
+  { x: 0.494, y: 0.694 }, // 6
+  { x: 0.438, y: 0.689 }, // 7
+  { x: 0.401, y: 0.648 }, // 8
+];
+
+// ### eye ###
+// array for the positions of normalized coordianates
+const puzzleDotsEye = [
+  { x: 0.426, y: 0.441 }, // 1
+  { x: 0.348, y: 0.474 }, // 2
+  { x: 0.25, y: 0.435 }, // 3
+  { x: 0.346, y: 0.385 }, // 4
 ];
 
 // array to fill the pixel coordinates
@@ -36,7 +60,7 @@ let drawPath = [];
 
 function preload() {
   handpose = ml5.handPose();
-  bgImg = loadImage("img/placeholder-background.png");
+  bgImg = loadImage("img/lady_01.png");
 }
 
 function setup() {
