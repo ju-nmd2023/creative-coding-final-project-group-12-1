@@ -22,6 +22,18 @@ let puzzleDotsPixels = [];
 // diameter of the dot drawn
 let dotDiameter = 12;
 
+// radius of the dot drawn
+let dotRadius = dotDiameter / 2;
+
+// how close the finger must be
+let hitRadius = dotRadius * 1.1;
+
+// index of the next dot to reach
+let currentDot = 0;
+
+// array for visited dots
+let drawPath = [];
+
 function preload() {
   handpose = ml5.handPose();
   bgImg = loadImage("img/placeholder-background.png");
@@ -43,31 +55,52 @@ function setup() {
 
 function draw() {
   // background used for tests
-  //   background(255, 251, 189);
+  // background(255, 251, 189);
 
+  // --------------------
   // ########## Check out this part ##########
-  // ########## Uncomment lines to test ##########
+  // --------------------
   // various tints that change how the images is seen
-  // uncomment each version
 
   // red
-  //   tint(255, 0, 0);
+  // tint(255, 0, 0);
 
   // green
-  //   tint(0, 255, 0);
+  // tint(0, 255, 0);
 
   // blue
   // tint(0, 0, 255);
 
   // make the background png darker, reveal each part stepwise?
-  //   background(0);
-  //   tint(255, 50);
+  // background(0);
+  // tint(255, 50);
 
+  // --------------------
   // ########## End of test ###########
+  // --------------------
 
   image(bgImg, 0, 0, width, height);
 
+  // drawing the dots with normal (non-mirrored) coordinates
   drawDots();
+
+  // un-mirroring the logic for the finger movement
+  const finger = getMirroredFinger();
+
+  if (finger) {
+    // The following 7 lines of code were adapted with the help of ChatGPT
+    // hit test that checks if a dot was connected
+    if (currentDot < puzzleDotsPixels.length) {
+      const target = puzzleDotsPixels[currentDot];
+      const d = dist(finger.x, finger.y, target.x, target.y);
+      if (d <= hitRadius) {
+        // record progress - store the path in drawPath array
+        drawPath.push({ x: target.x, y: target.y });
+        // go to the next dot
+        currentDot++;
+      }
+    }
+  }
 
   // mirror for a natural feel
   push();
@@ -117,13 +150,40 @@ function drawDots() {
     // current dot position
     const dot = puzzleDotsPixels[i];
 
+    // dot status
+    const isVisited = i < currentDot;
+    const isCurrent = i === currentDot;
+    const isUpcoming = i > currentDot;
+
+    // colors for statuses
+    if (isVisited) {
+      fill(255, 255, 255, 50);
+    }
+
+    if (isCurrent) {
+      fill(255, 255, 255);
+    }
+
+    if (isUpcoming) {
+      fill(255, 255, 255, 150);
+    }
+
     ellipse(dot.x, dot.y, dotDiameter);
 
+    // text numbers
     fill(0, 0, 0);
     text(i + 1, dot.x, dot.y);
-
-    fill(255, 255, 255, 150);
   }
+}
+
+// The following 7 lines of code were adapted with the help of ChatGPT
+// un-mirroring the fingertip coordinates by flipping x value back
+function getMirroredFinger() {
+  if (hands.length === 0) return null;
+  // raw coordinates
+  const indexFinger = hands[0].index_finger_tip;
+  // flip x value, keep y value
+  return { x: width - indexFinger.x, y: indexFinger.y };
 }
 
 function getHandsData(results) {
