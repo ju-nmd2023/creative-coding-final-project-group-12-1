@@ -20,23 +20,26 @@ const puzzleDotsFace = [
 // ### lips ###
 // array for the positions of normalized coordianates
 const puzzleDotsLips = [
-  { x: 0.391, y: 0.633 }, // 1
-  { x: 0.438, y: 0.602 }, // 2
+  { x: 0.396, y: 0.628 }, // 1
+  { x: 0.437, y: 0.599 }, // 2
   { x: 0.458, y: 0.608 }, // 3
   { x: 0.488, y: 0.59 }, // 4
   { x: 0.538, y: 0.638 }, // 5
   { x: 0.494, y: 0.694 }, // 6
   { x: 0.438, y: 0.689 }, // 7
-  { x: 0.401, y: 0.648 }, // 8
+  { x: 0.396, y: 0.643 }, // 8
 ];
 
 // ### eye ###
 // array for the positions of normalized coordianates
 const puzzleDotsEye = [
-  { x: 0.426, y: 0.441 }, // 1
-  { x: 0.348, y: 0.474 }, // 2
-  { x: 0.25, y: 0.435 }, // 3
-  { x: 0.346, y: 0.385 }, // 4
+  { x: 0.426, y: 0.449 }, // 1
+  { x: 0.361, y: 0.471 }, // 2
+  { x: 0.34, y: 0.471 }, // 3
+  { x: 0.255, y: 0.439 }, // 4
+  { x: 0.328, y: 0.421 }, // 5
+  { x: 0.36, y: 0.415 }, // 6
+  { x: 0.417, y: 0.439 }, // 7
 ];
 
 // ### stages and background
@@ -238,7 +241,7 @@ function drawDots() {
   noStroke();
   fill(255, 255, 255);
   textAlign(CENTER, CENTER);
-  textSize(12);
+  textSize(10);
 
   for (let i = 0; i < puzzleDotsPixels.length; i++) {
     // current dot position
