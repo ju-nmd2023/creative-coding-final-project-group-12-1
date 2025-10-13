@@ -1,11 +1,10 @@
 let handpose;
 let video;
 let hands = [];
-let bgImg;
 
 // ### face ###
 // array for the positions of normalized coordianates
-const puzzleDots = [
+const puzzleDotsFace = [
   { x: 0.452, y: 0.031 }, // 1
   { x: 0.413, y: 0.557 }, // 2
   { x: 0.451, y: 0.557 }, // 3
@@ -40,6 +39,21 @@ const puzzleDotsEye = [
   { x: 0.346, y: 0.385 }, // 4
 ];
 
+// ### stages and background
+let stageImages = [];
+
+let bgImg;
+
+// an array containing all of the stages
+const stages = [
+  { name: "face", dots: puzzleDotsFace, bgIndex: 0 },
+  { name: "lips", dots: puzzleDotsLips, bgIndex: 1 },
+  { name: "eye", dots: puzzleDotsEye, bgIndex: 2 },
+  { name: "final", dots: [], bgIndex: 3 },
+];
+
+let currentStageIndex = 0;
+
 // array to fill the pixel coordinates
 let puzzleDotsPixels = [];
 
@@ -60,7 +74,14 @@ let drawPath = [];
 
 function preload() {
   handpose = ml5.handPose();
-  bgImg = loadImage("img/lady_01.png");
+
+  // pre-load all of the backgrounds
+  stageImages = [
+    loadImage("img/lady_01.png"),
+    loadImage("img/lady_02.png"),
+    loadImage("img/lady_03.png"),
+    loadImage("img/lady_04.png"),
+  ];
 }
 
 function setup() {
@@ -75,6 +96,9 @@ function setup() {
   video.hide();
 
   handpose.detectStart(video, getHandsData);
+
+  // starting stage setup
+  setStage(0);
 }
 
 function draw() {
@@ -115,7 +139,7 @@ function draw() {
   const finger = getMirroredFinger();
 
   if (finger) {
-    // The following 7 lines of code were adapted with the help of ChatGPT
+    // The following 14 lines of code were adapted with the help of ChatGPT
     // hit test that checks if a dot was connected
     if (currentDot < puzzleDotsPixels.length) {
       const target = puzzleDotsPixels[currentDot];
@@ -125,6 +149,10 @@ function draw() {
         drawPath.push({ x: target.x, y: target.y });
         // go to the next dot
         currentDot++;
+        // if finished this stage, advance to next
+        if (currentDot >= puzzleDotsPixels.length) {
+          advanceStage();
+        }
       }
     }
   }
@@ -148,6 +176,30 @@ function draw() {
   pop();
 }
 
+// The following 22 lines of code were adapted with the help of ChatGPT
+function setStage(stageIndex) {
+  currentStageIndex = stageIndex;
+
+  bgImg = stageImages[stages[currentStageIndex].bgIndex];
+
+  // console.log("Stage: ", stages[currentStageIndex].name, " Dots: ", stages[currentStageIndex].dots.length, " bgIndex: ", stages[currentStageIndex].bgIndex);
+
+  // reset drawing progress for each stage
+  drawPath = [];
+  currentDot = 0;
+
+  // convert pixel coordinates into normalized dot coordinates
+  calculateDotPixels();
+}
+
+// switching stages to progress the puzzle
+function advanceStage() {
+  // advance to the next when finished with the current stage
+  if (currentStageIndex < stages.length - 1) {
+    setStage(currentStageIndex + 1);
+  }
+}
+
 // console.log the normalized coordinates values (rounded to 3 decimals)
 // function mousePressed() {
 //   const xn = +(mouseX / width).toFixed(3);
@@ -155,15 +207,14 @@ function draw() {
 //   console.log(`{ x: ${xn}, y: ${yn} },`);
 // }
 
+// The following 8 lines of code were adapted with the help of ChatGPT
 function calculateDotPixels() {
   puzzleDotsPixels = [];
-
+  const dots = stages[currentStageIndex].dots;
   // fills the new array with pixel coordinates
-  for (let i = 0; i < puzzleDots.length; i++) {
-    const dot = puzzleDots[i];
-    const xPixel = dot.x * width;
-    const yPixel = dot.y * height;
-    puzzleDotsPixels.push({ x: xPixel, y: yPixel });
+  for (let i = 0; i < dots.length; i++) {
+    const p = dots[i];
+    puzzleDotsPixels.push({ x: p.x * width, y: p.y * height });
   }
 }
 
@@ -231,4 +282,9 @@ function getMirroredFinger() {
 
 function getHandsData(results) {
   hands = results;
+}
+
+// move to the next stage with the "N"-key - only for testing
+function keyPressed() {
+  if (key === "N") advanceStage();
 }
