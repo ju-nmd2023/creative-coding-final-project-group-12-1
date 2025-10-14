@@ -42,6 +42,18 @@ const puzzleDotsEye = [
   { x: 0.417, y: 0.439 }, // 7
 ];
 
+// // ### second eye ###
+// // array for the positions of normalized coordianates
+const puzzleDotsSecondEye = [
+  { x: 0.464, y: 0.359 }, // 1
+  { x: 0.545, y: 0.32 }, // 2
+  { x: 0.581, y: 0.326 }, // 3
+  { x: 0.673, y: 0.35 }, // 4
+  { x: 0.571, y: 0.391 }, // 5
+  { x: 0.543, y: 0.393 }, // 6
+  { x: 0.475, y: 0.365 }, // 7
+];
+
 // ### stages and background
 let stageImages = [];
 
