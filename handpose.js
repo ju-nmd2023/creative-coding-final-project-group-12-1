@@ -75,6 +75,14 @@ let currentDot = 0;
 // array for visited dots
 let drawPath = [];
 
+// these are used for eliminating the camera jittering problem
+// stores the previous smoothed point
+let smoothFingerPt;
+// controls how much of the new value is accepted each frame
+// New value = Old value + SMOOTHING × (Raw − Old)
+// 0..1 (higher = snappier, lower = smoother)
+const SMOOTHING = 0.25;
+
 function preload() {
   handpose = ml5.handPose();
 
@@ -102,6 +110,29 @@ function setup() {
 
   // starting stage setup
   setStage(0);
+}
+
+// --------------------
+// The mlp5 camera gives a slightly different fingertip position with every frame.
+// This makes the ellipse wiggle, especially when the hit test occurs, close to the dot.
+// The function below comes from ChatGPT and it adds an averager.
+// This allows to blend the new position with the previous one, so sudden tiny hops get softened.
+// Without this, the puzzle was doable, but with this this, the experience is much better.
+// We weren't able to come up with a solution for the jittering on our own, so we used ChatGPT's solution
+// --------------------
+
+// The following 12 lines of code were adapted with the help of ChatGPT
+function smoothFinger(raw) {
+  if (!raw) return null;
+  if (!smoothFingerPt) {
+    // first frame: just take the raw value
+    smoothFingerPt = { x: raw.x, y: raw.y };
+  } else {
+    // exponential moving average (lerp)
+    smoothFingerPt.x += (raw.x - smoothFingerPt.x) * SMOOTHING;
+    smoothFingerPt.y += (raw.y - smoothFingerPt.y) * SMOOTHING;
+  }
+  return smoothFingerPt;
 }
 
 function draw() {
@@ -169,11 +200,18 @@ function draw() {
   //   image(video, 0, 0, width, height);
 
   if (hands.length > 0) {
-    let indexFinger = hands[0].index_finger_tip;
+    // old logic, before implementing the smoothing function
+    // let indexFinger = hands[0].index_finger_tip;
+
+    // raw fingertip from ml5
+    const raw = hands[0].index_finger_tip;
+    // smoothed fingertip
+    const smoothed = smoothFinger(raw);
+
     push();
     fill(255, 255, 255);
 
-    ellipse(indexFinger.x, indexFinger.y, 10);
+    ellipse(smoothed.x, smoothed.y, 10);
     pop();
   }
   pop();
