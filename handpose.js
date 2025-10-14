@@ -83,6 +83,10 @@ let smoothFingerPt;
 // 0..1 (higher = snappier, lower = smoother)
 const SMOOTHING = 0.25;
 
+// sound
+let synth;
+const notes = ["C4", "D4", "E4", "G4", "A4", "B3", "F4"];
+
 function preload() {
   handpose = ml5.handPose();
 
@@ -97,6 +101,8 @@ function preload() {
 
 function setup() {
   createCanvas(1024, 768);
+
+  synth = new Tone.Synth().toDestination();
 
   calculateDotPixels();
   // check the calculation pixel calculation
@@ -173,7 +179,7 @@ function draw() {
   const finger = getMirroredFinger();
 
   if (finger) {
-    // The following 14 lines of code were adapted with the help of ChatGPT
+    // The following 14 lines of code (excluding the ones connected to the sound) were adapted with the help of ChatGPT
     // hit test that checks if a dot was connected
     if (currentDot < puzzleDotsPixels.length) {
       const target = puzzleDotsPixels[currentDot];
@@ -181,6 +187,10 @@ function draw() {
       if (d <= hitRadius) {
         // record progress - store the path in drawPath array
         drawPath.push({ x: target.x, y: target.y });
+
+        // play a hit tone
+        playDotHit(currentDot);
+
         // go to the next dot
         currentDot++;
         // if finished this stage, advance to next
@@ -328,4 +338,19 @@ function getHandsData(results) {
 // move to the next stage with the "N"-key - only for testing
 function keyPressed() {
   if (key === "N") advanceStage();
+}
+
+// play a note once a dot is hit
+function playDotHit() {
+  const randomNote = random(notes);
+  synth.triggerAttackRelease(randomNote, "8n");
+}
+
+// unlock audio context on first user interaction
+function mousePressed() {
+  Tone.start();
+}
+
+function touchStarted() {
+  Tone.start();
 }
