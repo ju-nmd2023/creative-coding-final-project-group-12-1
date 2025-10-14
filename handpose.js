@@ -199,11 +199,25 @@ function draw() {
       const target = puzzleDotsPixels[currentDot];
       const d = dist(finger.x, finger.y, target.x, target.y);
       if (d <= hitRadius) {
+        // check if the current dot is the last dot
+        let isLastDot = false;
+        if (currentDot === puzzleDotsPixels.length - 1) {
+          isLastDot = true;
+        }
+
         // record progress - store the path in drawPath array
         drawPath.push({ x: target.x, y: target.y });
 
-        // play a hit tone
-        playDotHit(currentDot);
+        if (isLastDot) {
+          // play a chime if the last dot is reached
+          // the following 3 lines of code were adapted from StackOverflow: https://stackoverflow.com/questions/72178098/tone-js-how-to-know-when-triggerrelease-has-finished (accessed 2025-10-14)
+          const now = Tone.now();
+          synth.triggerAttackRelease("G4", "16n", now);
+          synth.triggerAttackRelease("C5", "16n", now + 0.24);
+        } else {
+          // play regular hit tone
+          playDotHit(currentDot);
+        }
 
         // go to the next dot
         currentDot++;
