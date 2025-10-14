@@ -51,7 +51,7 @@ const puzzleDotsSecondEye = [
   { x: 0.673, y: 0.35 }, // 4
   { x: 0.571, y: 0.391 }, // 5
   { x: 0.543, y: 0.393 }, // 6
-  { x: 0.475, y: 0.365 }, // 7
+  { x: 0.475, y: 0.365 }, // 7
 ];
 
 // ### stages and background
@@ -64,7 +64,8 @@ const stages = [
   { name: "face", dots: puzzleDotsFace, bgIndex: 0 },
   { name: "lips", dots: puzzleDotsLips, bgIndex: 1 },
   { name: "eye", dots: puzzleDotsEye, bgIndex: 2 },
-  { name: "final", dots: [], bgIndex: 3 },
+  { name: "secondEye", dots: puzzleDotsSecondEye, bgIndex: 3 },
+  { name: "final", dots: [], bgIndex: 4 },
 ];
 
 let currentStageIndex = 0;
@@ -104,10 +105,11 @@ function preload() {
 
   // pre-load all of the backgrounds
   stageImages = [
-    loadImage("img/lady_01.png"),
-    loadImage("img/lady_02.png"),
-    loadImage("img/lady_03.png"),
-    loadImage("img/lady_04.png"),
+    loadImage("img/woman_01.png"),
+    loadImage("img/woman_02.png"),
+    loadImage("img/woman_03.png"),
+    loadImage("img/woman_04.png"),
+    loadImage("img/woman_05.png"),
   ];
 }
 
