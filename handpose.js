@@ -129,7 +129,7 @@ function setup() {
   handpose.detectStart(video, getHandsData);
 
   // starting stage setup
-  setStage(0);
+  setStage(2);
 }
 
 // --------------------
@@ -205,15 +205,32 @@ function draw() {
           isLastDot = true;
         }
 
+        // check if the current stage is second to last
+        let isSecondToLastStage = false;
+        if (currentStageIndex === stages.length - 2) {
+          isSecondToLastStage = true;
+        }
+
         // record progress - store the path in drawPath array
         drawPath.push({ x: target.x, y: target.y });
 
         if (isLastDot) {
-          // play a chime if the last dot is reached
-          // the following 3 lines of code were adapted from StackOverflow: https://stackoverflow.com/questions/72178098/tone-js-how-to-know-when-triggerrelease-has-finished (accessed 2025-10-14)
-          const now = Tone.now();
-          synth.triggerAttackRelease("G4", "16n", now);
-          synth.triggerAttackRelease("C5", "16n", now + 0.24);
+          if (isSecondToLastStage) {
+            // play a final chime if the second to last stage is reached
+            // the following 5 lines of code were adapted from StackOverflow: https://stackoverflow.com/questions/72178098/tone-js-how-to-know-when-triggerrelease-has-finished (accessed 2025-10-14)
+            const now = Tone.now();
+            synth.triggerAttackRelease("D4", "16n", now);
+            synth.triggerAttackRelease("G4", "16n", now + 0.12);
+            synth.triggerAttackRelease("C5", "16n", now + 0.24);
+            synth.triggerAttackRelease("C6", "32n", now + 0.48);
+          } else {
+            // play a chime if the last dot is reached
+            // the following 4 lines of code were adapted from StackOverflow: https://stackoverflow.com/questions/72178098/tone-js-how-to-know-when-triggerrelease-has-finished (accessed 2025-10-14)
+            const now = Tone.now();
+            synth.triggerAttackRelease("D4", "16n", now);
+            synth.triggerAttackRelease("G4", "16n", now + 0.12);
+            synth.triggerAttackRelease("C5", "16n", now + 0.24);
+          }
         } else {
           // play regular hit tone
           playDotHit(currentDot);
