@@ -100,9 +100,6 @@ const SMOOTHING = 0.25;
 let synth;
 const notes = ["C4", "D4", "E4", "G4", "A4", "B3", "F4"];
 
-// button
-let restartButton = document.getElementById("restart-button");
-
 function preload() {
   handpose = ml5.handPose();
 
@@ -117,8 +114,7 @@ function preload() {
 }
 
 function setup() {
-  const canvasContainer = createCanvas(1024, 768);
-  canvasContainer.parent("canvas-holder");
+  createCanvas(1024, 768);
 
   synth = new Tone.Synth().toDestination();
 
@@ -158,19 +154,6 @@ function smoothFinger(raw) {
   }
   return smoothFingerPt;
 }
-
-// show & hide button functions
-function showRestartButton() {
-  restartButton.classList.remove("is-hidden");
-}
-
-function hideRestartButton() {
-  restartButton.classList.add("is-hidden");
-}
-
-restartButton.addEventListener("click", function () {
-  window.location.href = "index.html";
-});
 
 function draw() {
   // background used for tests
@@ -304,11 +287,8 @@ function setStage(stageIndex) {
   // convert pixel coordinates into normalized dot coordinates
   calculateDotPixels();
 
-  // show the restart button when the puzzle is completed
-  if (currentStageIndex === stages.length - 1) {
-    showRestartButton();
-  } else {
-    hideRestartButton();
+  if (puzzleDotsPixels.length === 0) {
+    advanceStage();
   }
 }
 
@@ -317,6 +297,13 @@ function advanceStage() {
   // advance to the next when finished with the current stage
   if (currentStageIndex < stages.length - 1) {
     setStage(currentStageIndex + 1);
+  } else {
+    // when all stages are done restart the puzzle from the begining after 3 seconds
+    console.log("Puzzle complete!");
+    setTimeout(function () {
+      resetPuzzle();
+      // 3 seconds
+    }, 3000);
   }
 }
 
@@ -422,4 +409,8 @@ function mousePressed() {
 
 function touchStarted() {
   Tone.start();
+}
+
+function resetPuzzle() {
+  window.location.href = "index.html";
 }
