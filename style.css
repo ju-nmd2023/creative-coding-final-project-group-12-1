@@ -5,8 +5,109 @@ body {
   background: #000000;
 }
 
-/* Center canvas */
 body {
   display: grid;
   place-items: center;
+}
+
+#puzzle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.is-hidden {
+  visibility: hidden;
+}
+
+/* The css styling of this button was adapted from https://getcssscan.com/css-buttons-examples (Button 89 by Temani Afif) (Accessed: 2025-10-16) */
+/* --- Button 89 --- */
+.button-89 {
+  /* border thickness */
+  --b: 2px;
+  /* size of the corner */
+  --s: 0.45em;
+  /* color for text/outline */
+  --color: #f5a41d;
+
+  padding: calc(0.5em + var(--s)) calc(0.9em + var(--s));
+  color: var(--color);
+  --_p: var(--s);
+  background: conic-gradient(
+      from 90deg at var(--b) var(--b),
+      #000000 90deg,
+      var(--color) 0
+    )
+    var(--_p) var(--_p) / calc(100% - var(--b) - 2 * var(--_p))
+    calc(100% - var(--b) - 2 * var(--_p));
+  transition: 0.3s linear, color 0s, background-color 0s;
+  outline: var(--b) solid #000000;
+  outline-offset: 0.6em;
+  font-family: "Montserrat", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  background-color: transparent;
+  border: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-89:hover,
+.button-89:focus-visible {
+  --_p: 0px;
+  outline-color: var(--color);
+  outline-offset: 0.05em;
+}
+
+/* Make active state readable on dark or light outlines */
+.button-89:active {
+  background: var(--color);
+  color: #000000;
+}
+
+/* --- Button 89 --- */
+.button-89-start {
+  /* border thickness */
+  --b: 2px;
+  /* size of the corner */
+  --s: 0.45em;
+  /* color for text/outline */
+  --color: #00b3e2;
+
+  padding: calc(0.5em + var(--s)) calc(0.9em + var(--s));
+  color: var(--color);
+  --_p: var(--s);
+  background: conic-gradient(
+      from 90deg at var(--b) var(--b),
+      #000000 90deg,
+      var(--color) 0
+    )
+    var(--_p) var(--_p) / calc(100% - var(--b) - 2 * var(--_p))
+    calc(100% - var(--b) - 2 * var(--_p));
+  transition: 0.3s linear, color 0s, background-color 0s;
+  outline: var(--b) solid #000000;
+  outline-offset: 0.6em;
+  font-family: "Montserrat", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  background-color: transparent;
+  border: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-89-start:hover,
+.button-89-start:focus-visible {
+  --_p: 0px;
+  outline-color: var(--color);
+  outline-offset: 0.05em;
+}
+
+/* Make active state readable on dark or light outlines */
+.button-89-start:active {
+  background: var(--color);
+  color: #000000;
 }
