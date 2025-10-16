@@ -80,7 +80,7 @@ let dotDiameter = 12;
 let dotRadius = dotDiameter / 2;
 
 // how close the finger must be
-let hitRadius = dotRadius * 1.1;
+let hitRadius = dotRadius * 1.4;
 
 // index of the next dot to reach
 let currentDot = 0;
